@@ -1,0 +1,36 @@
+# ==============================
+# Main Configuration for AppServer
+# ==============================
+
+
+database:
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+
+  postgres:
+    user: "postgres"
+    password: "LeartPee1138?"
+    host: "localhost"
+    port: 5432
+    dbname: "ss"
+
+paths:
+  templates_dir: "/home/zoot/dataserver/apps/templates"
+
+
+nats:
+  server: "nats://127.0.0.1:5222"
+  publish_topic: "mesh.data"  # This is what Catcher subscribes to
+
+logging:
+  level: "INFO"     # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_file: "/var/log/dataserver.log"
+
+ephem:
+  lat: 37.7749
+  lon: -122.4194
+  sleep_no_sun: 3600
+  max_night: 43200
+  sleep_all_night: false

@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="{{ url_static('styles/reports.css', _external=True) }}" media="screen">
+<title>{% block title %}{% endblock %}</title>
+
+</head>
+<body>
+<div class="site_main">
+	<div class="site_header">
+		<h1>Solar Power Technologies</h1>
+	</div>
+	<div class="site_body">
+		{% block body %}{% endblock %}
+	</div>
+</div>
+</body>
+</html>

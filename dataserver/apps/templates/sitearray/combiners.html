@@ -1,0 +1,59 @@
+{% extends "_templates/layout.html" %}
+{% import '_templates/macro_modules.html' as modules with context %}
+{% import '_templates/macro_includes.html' as includes with context %}
+
+{% block title %}Combiner Dashboard{% endblock %}
+
+{% block includes %}<!-- Page specific includes -->
+{{ includes.dashboard('debug') }}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.charts.init();
+	});
+</script>
+<!-- end Page specific includes -->{% endblock %}
+
+{% block pageID %}page_dashboard{% endblock %}
+{% block body %}
+	<div class="container_headerWithNav">
+		<h2>Dashboard  <span>&ndash; <a href="/ia/dashboard/">{{ g.sitearray.site.sitename }} {{ g.sitearray.label }}</a> &raquo; <a href="/ia/dashboard/inverter/{{ combiners[0].inverter.label.replace(' ','_') }}">Inverter {{ combiners[0].inverter.label }}</a> &raquo; Combiner {{ combiners[0].label }}</span></h2>
+		
+		<div class="container_viewControls">
+			{{ modules.dateSelection(g.min_date, g.max_date) }}
+			{{ modules.pageNav('dashboard') }}
+		</div>
+	</div>
+	
+	<div class="column_group">
+		<div class="column_fixed">
+			{{ modules.arrayNav() }}
+		</div>
+		<div class="column_fluid">
+			{{ modules.map("myMap", hilite_panels, g.sitearray.preferred_rotation, g.sitearray.offset_dir, "Map Title") }}
+			
+            {% for combiner in combiners %}
+            <h3>Combiner: {{ combiner.label }}</h3>
+            Inverter: {{ combiner.inverter.label }}</br/>
+            {% for pstring in combiner.strings %}
+            &nbsp; String: {{ pstring.label }} -- {{ pstring.panels.count() }} panels<br/>
+            {% endfor %}
+            {% endfor %}
+
+            <p>
+            hilite panels: {{ hilite_panels }}
+            </p>
+
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block popUpContent %}
+	<div id="popUp" class="popUp_content" style="display:none;">
+		<h3>Header</h3>
+		<div class="content">
+			Content
+		</div>
+	</div>
+{% endblock %}

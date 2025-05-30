@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Default Title{% endblock %}</title>
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="/static/styles/fonts.css">
+    <link rel="stylesheet" href="/static/styles/jquery-ui.css">
+
+    {% block includes %}{% endblock %}
+</head>
+<body>
+    <header>
+        <!-- Global Header -->
+        <nav>
+            <ul>
+                <li><a href="/sitedata/dashboard">Dashboard</a></li>
+                <li><a href="/sitedata/mapviewer">Map Viewer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block page_header %}{% endblock %}
+        {% block page_body %}{% endblock %}
+    </main>
+
+    <footer>
+        <!-- Global Footer -->
+        <p>© 2025 Your Company. All rights reserved.</p>
+    </footer>
+
+    <!-- Global Scripts -->
+    <script src="/static/scripts/frameworks/jquery-1.8.2.js"></script>
+    <script src="/static/scripts/frameworks/jquery-ui.js"></script>
+    <script src="/static/scripts/modules/utils.js"></script>
+    <script src="/static/scripts/modules/dashboard.js"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

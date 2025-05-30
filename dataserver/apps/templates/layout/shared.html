@@ -1,0 +1,25 @@
+{% macro includes() -%}
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+<link rel="stylesheet" href="/static/style.css">
+
+
+{%- endmacro %}
+
+{% macro header() -%}
+<h1>Mesh DAQ</h1>
+<div class="site_nav">
+
+
+</div>
+{%- endmacro %}
+
+{% macro pageNav(active) -%}
+<div class="page_nav">
+    <span class="navHeader">Navigation</span>
+    <ul>
+            <li><a href="/sitedata/dashboard">Dashboard</a></li>
+            <li><a href="/sitedata/mapviewer">Map Viewer</a></li>
+    </ul>
+</div>
+{%- endmacro %}

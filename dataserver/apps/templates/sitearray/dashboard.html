@@ -1,0 +1,57 @@
+{% extends "_templates/layout.html" %}
+{% import '_templates/macro_modules.html' as modules with context %}
+{% import '_templates/macro_includes.html' as includes with context %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block includes %}<!-- Page specific includes -->
+{{ includes.dashboard('debug') }}
+
+<!-- end Page specific includes -->{% endblock %}
+
+{% block pageID %}page_dashboard{% endblock %}
+{% block body %}
+	<div class="container_headerWithNav">
+		<h2>Dashboard <span>&ndash; {{ g.sitearray.site.sitename }} {{ g.sitearray.label }}</span></h2>
+		
+		<div class="container_viewControls">
+			{{ modules.dateSelection(g.min_date, g.max_date) }}
+			{{ modules.pageNav('dashboard') }}
+		</div>
+	</div>
+	
+	<div class="column_group">
+		<div class="column_fixed">
+			{{ modules.arrayNav() }}
+		</div>
+		<div class="column_fluid">
+
+			{{ modules.map("myMap", "", g.sitearray.preferred_rotation, g.sitearray.offset_dir, "Map Title") }}
+			
+			{{ modules.chart("irradianceAndPowerOut", "env+opt|arrayavg", "env+opt|arrayavg", "irradiance_mean+Po_sum", "Irradiance and Power Out") }} 
+			
+			<div class="floatContainer">
+				<br><hr>
+				<h3>Dates</h3>
+				<p>{{ g.min_date }} - {{ g.max_date }}</p>
+				<br><hr>
+				<h3>Device Extent</h3>
+                X: &nbsp; {{ g.sitearray.extent_lo_x }} to {{ g.sitearray.extent_hi_x }}<br>
+                Y: &nbsp; {{ g.sitearray.extent_lo_y }} to {{ g.sitearray.extent_hi_y }}<br>
+				Default Rotation: &nbsp; {{ g.sitearray.preferred_rotation }}<br>
+				North Offset: &nbsp; {{ g.sitearray.offset_dir }}<br>
+				<br><hr>
+				<h3>Issues</h3>
+				{% for issue in issues %}
+				Issue: {{ issue.level() }} -- {{ issue.summary }}{% for tag in issue.tags %} &nbsp; {{ tag }}{% endfor %}<br/>
+				{% endfor %}
+
+				<br><hr>
+				<h3>Zones</h3>
+				{% for zone in zones %}
+				Zone: <a href="/ia/dashboard/zone/{{ zone.label }}">{{ zone.label }}</a> -- {{ zone.panels|length }} panels<br/>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

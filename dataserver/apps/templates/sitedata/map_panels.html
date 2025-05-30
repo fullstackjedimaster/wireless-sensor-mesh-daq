@@ -1,0 +1,8 @@
+{% for panel in panels %}
+<div class="panel status-{{ panel.status | lower }}"
+     style="left: {{ 50 + (loop.index0 % 2) * 100 }}px; top: {{ 50 + (loop.index0 // 2) * 80 }}px;">
+    {{ panel.panel_name or panel.macaddr }}<br>
+    {{ panel.voltage or "0.0" }}V<br>
+    {{ panel.current or "0.0" }}A
+</div>
+{% endfor %}

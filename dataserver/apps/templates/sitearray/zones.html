@@ -1,0 +1,23 @@
+{% extends "_templates/layout.html" %}
+{% block title %}SiteArray Zones for {{ g.sitearray.site.sitename }}: {{ g.sitearray.label }}{% endblock %}
+{% block body %}
+<h2>SiteArray Zones</h2>
+<h3>{{ g.sitearray.site.sitename }}: {{ g.sitearray.label }}</h3>
+<p>
+<ul>
+{% for zone in g.sitearray.zones %}
+    <li> &nbsp; Zone: {{ zone.label }}
+    <ul>
+    {% for panel in zone.panels %}
+        <li> &nbsp; Panel: {{ panel.label }} &nbsp; {{ panel.offset_x }} {{ panel.offset_y }}</li>
+    {% endfor %}
+    </ul></li>
+{% endfor %}
+</ul>
+</p>
+<p>
+hilite panels: {{ hilite_panels }}
+</p>
+<a href="/ia/devices">Show Devices</a> &nbsp; <a href="/ia/dashboard/">Show Dashboard</a>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends "_templates/layout.html" %}
+{% block title %}SiteArray {{ g.sitearray.site.sitename }} {{ g.sitearray.label }}{% endblock %}
+{% block body %}
+<h2>Site Array</h2>
+<p>
+Site Name: {{ g.sitearray.site.sitename }} &nbsp; <a href="/ia/dashboard/">Dashboard</a> &nbsp; <a href="/ia/devices/">Devices</a> &nbsp; <a href="/ia/zones/">Zones</a>
+</p>
+<p>
+Integrator: {{ g.sitearray.site.integrator }}
+</p>
+<p>
+Owner: {{ g.sitearray.site.owner }}
+</p>
+<p>
+Site Array Name: {{ g.sitearray.label }}
+</p>
+{% endblock %}
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/clarity_util" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/templates" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/venv" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/arraytools" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/arraytools/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/arraytools/views" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitearray" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitearray/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitearray/views" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitedata" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitedata/tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/sitedata/views" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/ClarityV5AppServer.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/account" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/alerts" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/equipment" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/issue" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/etc" />
+      <excludeFolder url="file://$MODULE_DIR$/migrations" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/mkdata" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/mkdata/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/mkdata/views" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.13 virtualenv at ~/appserver/venv" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="chartjs-adapter-date-fns" level="application" />
+    <orderEntry type="library" name="chart.js" level="application" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+  </component>
+</module>

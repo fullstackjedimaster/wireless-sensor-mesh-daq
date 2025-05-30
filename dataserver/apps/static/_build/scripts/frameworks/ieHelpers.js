@@ -1,0 +1,1 @@
+Object.create||(Object.create=function(b){function a(){}if(1<arguments.length)throw Error("Object.create implementation only accepts the first parameter.");a.prototype=b;return new a});Array.indexOf||(Array.prototype.indexOf=function(b){for(var a=0;a<this.length;a++)if(this[a]==b)return a;return-1});

@@ -1,0 +1,8 @@
+<ul>
+    {% for panel in panels %}
+        <li>
+            {{ panel.macaddr }} -
+            <span class="status-{{ panel.status }}">{{ panel.status }}</span>
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="/statics/dashboard.js"></script>
+</head>
+
+</head>
+<body>
+    <!-- Top Navigation Menu -->
+    <nav class="menu">
+        <ul>
+            <li><a href="/summary">Summary</a></li>
+            <li><a href="/array-intelligence">Array Intelligence</a></li>
+            <li><a href="/device-detail" class="active">Device Detail</a></li>
+            <li><a href="/map-viewer">Map Viewer</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Array Map -->
+        <div id="array-map" class="window">
+            <h2>Array Map</h2>
+            <div
+                hx-get="/partials/panel_status"
+                hx-trigger="load, every 1s"
+                hx-swap="innerHTML"
+                class="panel-container">
+</div>
+
+        </div>
+
+        <!-- Power Generation Chart -->
+        <div id="power-generation" class="window">
+            <h2>Power Generation</h2>
+            <canvas id="timeSeriesChart"></canvas>
+        </div>
+    </div>
+</body>
+</html>

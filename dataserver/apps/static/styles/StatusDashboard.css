@@ -1,0 +1,16 @@
+/* static/StatusDashboard.css */
+.panel-status-list {
+    list-style: none;
+    padding: 0;
+}
+.panel {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    font-family: sans-serif;
+}
+.status-red { background-color: #f44336; color: white; }
+.status-yellow { background-color: #ffeb3b; color: black; }
+.status-blue { background-color: #2196f3; color: white; }
+.status-grey { background-color: #9e9e9e; color: white; }
+.status-unknown { background-color: #607d8b; color: white; }
