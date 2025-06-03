@@ -1,10 +1,8 @@
 import os
 import yaml
 import redis
-import psycopg2
-from psycopg2.extras import DictCursor
 
-DEFAULT_SITE_CONFIG = "/opt/meshserver/DAQ/util/config.yaml"
+DEFAULT_SITE_CONFIG = "/opt/wireless-sensor-mesh-daq/meshserver/DAQ/util/config.yaml"
 
 _config = None
 
@@ -37,41 +35,6 @@ def get_topic(name: str) -> str:
     return topic_map.get(name) or config["nats"].get(f"{name}_topic")
 
 
-def get_redis_conn(db=None):
-    """Returns a Redis connection if Redis is configured."""
-    config = load_config()
-    redis_conf = config.get("database", {}).get("redis")
-    if not redis_conf:
-        raise RuntimeError("Redis config not found.")
-    return redis.StrictRedis(
-        host=redis_conf["host"],
-        port=redis_conf["port"],
-        db=db if db is not None else redis_conf.get("db", 0),
-        decode_responses=True
-    )
-
-
-def get_postgres_conn():
-    """Returns a PostgreSQL connection if configured."""
-    config = load_config()
-    pg = config.get("database", {}).get("postgres")
-    if not pg:
-        raise RuntimeError("Postgres config not found.")
-    return psycopg2.connect(
-        dbname=pg["dbname"],
-        user=pg["user"],
-        password=pg["password"],
-        host=pg["host"],
-        port=pg["port"],
-        cursor_factory=DictCursor
-    )
-
-
-def get_templates_dir():
-    """Returns the Jinja2 templates directory (for dataserver)."""
-    config = load_config()
-    return config.get("paths", {}).get("templates_dir", "apps/templates")
-
 
 def get_local_path(global_path, local_path, fname=None):
     """Return path if exists locally, fallback to global."""
@@ -92,6 +55,20 @@ def local_config():
         with open(DEFAULT_SITE_CONFIG, "r") as f:
             return yaml.safe_load(f)
     return {}
+
+def get_redis_conn(db=3):
+    """Returns a Redis connection if Redis is configured."""
+    config = load_config()
+    redis_conf = config.get("database", {}).get("redis")
+    if not redis_conf:
+        raise RuntimeError("Redis config not found.")
+    return redis.StrictRedis(
+        host=redis_conf["host"],
+        port=redis_conf["port"],
+        db=db if db is not None else redis_conf.get("db", 3),
+        decode_responses=True
+    )
+
 
 
 def read_pkginfo():

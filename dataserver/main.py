@@ -16,7 +16,7 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="/opt/dataserver/apps/static"), name="static")
+app.mount("/static", StaticFiles(directory="/opt/wireless-sensor-mesh-daq/dataserver/apps/static"), name="static")
 
 
 
@@ -31,4 +31,4 @@ async def root():
 
 # Entrypoint to run directly
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("dataserver.main:app", host="0.0.0.0", port=8000, reload=True)

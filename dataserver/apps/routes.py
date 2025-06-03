@@ -10,7 +10,7 @@ router = APIRouter()
 config = load_config()
 logger = make_logger("Route")
 
-templates = Jinja2Templates(directory="/opt/dataserver/apps/templates")
+templates = Jinja2Templates(directory="/opt/wireless-sensor-mesh-daq/dataserver/apps/templates")
 
 def normalize_mac(raw):
     try:

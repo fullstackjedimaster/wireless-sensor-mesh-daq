@@ -7,7 +7,7 @@ database:
   redis:
     host: "localhost"
     port: 6379
-    db: 0
+    db: 3s
 
   postgres:
     user: "pmikol"
@@ -17,7 +17,7 @@ database:
     dbname: "ss"
 
 paths:
-  templates_dir: "/opt/dataserver/apps/templates"
+  templates_dir: "/opt/wireless-sensor-mesh-daq/dataserver/apps/templates"
 
 
 nats:

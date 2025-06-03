@@ -2,11 +2,11 @@ import asyncio
 import bz2
 from bson import BSON, InvalidBSON
 from datetime import datetime
-from dataserver.apps.util.config import load_config, get_redis_conn, get_postgres_conn, get_topic
-from dataserver.apps.util.logger import make_logger
-from dataserver.apps.util.redis.access import GraphManager
-from dataserver.apps.util.daemon import Daemon
-from dataserver.apps.util.managers.nats_manager import nats_manager  # Centralized NATSManager
+from apps.util.config import load_config, get_redis_conn, get_postgres_conn, get_topic
+from apps.util.logger import make_logger
+from apps.util.redis.access import GraphManager
+from apps.util.daemon import Daemon
+from apps.util.managers.nats_manager import nats_manager  # Centralized NATSManager
 
 config = load_config()
 logger = make_logger("Catcher")
