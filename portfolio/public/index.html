@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paul Mikol | Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    header p { font-size: 1.2rem; color: #d1d5db; }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card h3 { margin-top: 0; color: #111827; }
+    .card p { font-size: 0.95rem; color: #4b5563; }
+    .card a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .skills, .contact {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .skills ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      list-style: none;
+      padding: 0;
+    }
+    .skills li {
+      background: #e0e7ff;
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .skills li:hover {
+      background: #c7d2fe;
+    }
+    .card.highlight {
+      outline: 3px solid #2563eb;
+      background: #eef2ff;
+      transform: scale(1.03);
+      z-index: 1;
+    }
+    .card.dim {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #f1f5f9;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Paul Mikol</h1>
+    <p>Full-stack architect & systems integrator with 35 years of experience</p>
+  </header>
+
+  <section class="projects">
+    <div id="global-embed" style="display:none; grid-column: 1 / -1;">
+      <iframe width="100%" height="700" style="border: 1px solid #ccc; border-radius: 8px;" src=""></iframe>
+    </div>
+  </section>
+
+  <section class="skills">
+    <h2>Core Skills & Tools</h2>
+    <ul>
+      <li>Python</li><li>JavaScript</li><li>NodeJS</li><li>ExpressJS</li>
+      <li>ReactJS</li><li>React Native</li><li>PHP</li><li>C#</li><li>ASP.NET</li>
+      <li>Flask</li><li>FastAPI</li><li>SVG</li><li>MSSQL</li><li>Oracle</li>
+      <li>MySQL</li><li>PostgreSQL</li><li>SQLite</li><li>Redis</li>
+      <li>Metakit</li><li>HDF5</li><li>MQTT/AMQP</li><li>NATS</li>
+      <li>RabbitMQ</li><li>Docker</li><li>Git</li><li>SCADA</li>
+      <li>Android Studio</li><li>Eclipse</li><li>VS Code</li>
+    </ul>
+  </section>
+
+  <section class="contact">
+    <h2>Let's Connect</h2>
+    <p>Looking to build something smart, scalable, and powerful? I'm available for freelance work and technical leadership roles.</p>
+    <p>Email: <a href="mailto:paul.mikol@gmail.com">paul.mikol@gmail.com</a></p>
+    <p>GitHub: <a href="https://github.com/tazwadshezed" target="_blank">github.com/tazwadshezed</a><br />
+       LinkedIn: <a href="https://linkedin.com/in/paulmikol" target="_blank">linkedin.com/in/paulmikol</a></p>
+  </section>
+
+  <footer>&copy; 2025 Paul Mikol. All rights reserved.</footer>
+
+  <script>
+    const projects = [
+      {
+        title: "Wireless Sensor Mesh Data Acquisition Platform",
+        description: "Generalized real-time SCADA/IoT telemetry engine with NATS messaging, interactive SVG maps, and Redis-based state management.",
+        link: "https://github.com/tazwadshezed/wireless-sensor-mesh-daq",
+        label: "View Source",
+        embed: "http://localhost:8000/sitearray/map",
+        skills: ["Python", "FastAPI", "Redis", "NATS", "PostgreSQL", "SVG"]
+      },
+      {
+        title: "JSON-Schema Dynamic Form Builder",
+        description: "Zero-config React form/page engine driven entirely by entity definitions — full CRUD, proper field types, and relationship handling via nested JSON.",
+        link: "#", label: "View Demo", skills: ["ReactJS", "JavaScript", "JSON"]
+      },
+      {
+      "title": "Node.js Message-Based REST Server",
+      "description": "Schema-driven Express API with real-time JSON messaging, middleware hooks, and database-agnostic architecture. Ready for embedded or cloud use.",
+      "link": "#", "label": "View Demo"
+    },
+    {
+      "title": "Full-Stack PHP Web App",
+      "description": "Built with vanilla PHP and MySQL. Includes session auth, RESTful endpoints, dynamic templates, and role-based access control.",
+      "link": "#", "label": "View Source"
+    },
+    {
+      "title": "React Native Video Recorder",
+      "description": "Prototype mobile app for client 'Paz' with Android emulation and debugging. React Native + Vision Camera + Native Modules.",
+      "link": "#", "label": "Watch Demo"
+    }
+    ];
+
+    const container = document.querySelector(".projects");
+    const embedContainer = document.getElementById("global-embed");
+    const iframe = embedContainer.querySelector("iframe");
+
+    projects.forEach((proj, index) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.setAttribute("data-skills", proj.skills?.join(",") || "");
+
+      card.innerHTML = `
+        <h3>${proj.title}</h3>
+        <p>${proj.description}</p>
+        <a href="${proj.link}" target="_blank">${proj.label}</a>
+        ${proj.embed ? `<br><a href="#" data-embed="${proj.embed}" class="embed-toggle">Toggle Live Demo</a>` : ''}
+      `;
+      container.insertBefore(card, embedContainer);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("embed-toggle")) {
+        e.preventDefault();
+        const embedUrl = e.target.getAttribute("data-embed");
+        if (embedContainer.style.display === "none" || iframe.src !== embedUrl) {
+          iframe.src = embedUrl;
+          embedContainer.style.display = "block";
+          embedContainer.scrollIntoView({ behavior: "smooth" });
+        } else {
+          embedContainer.style.display = "none";
+          iframe.src = "";
+        }
+      }
+    });
+
+    document.querySelectorAll(".skills li").forEach(skillBubble => {
+      skillBubble.addEventListener("mouseenter", () => {
+        const skill = skillBubble.textContent.trim();
+        document.querySelectorAll(".card").forEach(card => {
+          const cardSkills = card.getAttribute("data-skills").split(",");
+          if (cardSkills.includes(skill)) {
+            card.classList.add("highlight");
+            card.classList.remove("dim");
+          } else {
+            card.classList.add("dim");
+            card.classList.remove("highlight");
+          }
+        });
+      });
+      
+      skillBubble.addEventListener("click", () => {
+  	const skill = skillBubble.textContent.trim();
+  	window.open(`resume.html?skill=${encodeURIComponent(skill)}`, "_blank");
+      });
+
+
+      skillBubble.addEventListener("mouseleave", () => {
+        document.querySelectorAll(".card").forEach(card => {
+          card.classList.remove("highlight", "dim");
+        });
+      });
+    });
+  </script>
+</body>
+</html>

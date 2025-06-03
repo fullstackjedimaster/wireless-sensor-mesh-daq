@@ -1,6 +1,6 @@
 import glob
 from redis.asyncio import Redis
-from dataserver.apps.util.redis.exceptions import *
+from .exceptions import *
 from typing import Optional, List, Dict
 
 MANAGER_SLOT = 0

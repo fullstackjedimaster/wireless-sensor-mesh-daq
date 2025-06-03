@@ -3,8 +3,8 @@ import threading
 import subprocess
 import time
 from nats.aio.client import Client as NATS
-from dataserver.apps.util.config import load_config
-from dataserver.apps.util.logger import make_logger
+from apps.util.config import load_config
+from apps.util.logger import make_logger
 
 
 class NATSManager:

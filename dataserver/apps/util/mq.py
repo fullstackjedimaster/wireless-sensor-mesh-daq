@@ -1,12 +1,6 @@
-"""
-NATS wrapper classes/functions.
-
-Author: Thadeus Burgess (Updated for NATS)
-"""
-
 import asyncio
 import bson
-from DAQ.util.config import load_config
+from dataserver.apps.util.config import load_config
 from nats.aio.client import Client as NATS
 
 config = load_config()

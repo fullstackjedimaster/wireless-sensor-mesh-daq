@@ -16,10 +16,9 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="dataserver/apps/static"), name="static")
+app.mount("/static", StaticFiles(directory="/opt/dataserver/apps/static"), name="static")
 
-# Set up Jinja2 templates (used in routes and partials)
-templates = Jinja2Templates(directory="dataserver/apps/templates")
+
 
 # Include main router
 app.include_router(main_router)

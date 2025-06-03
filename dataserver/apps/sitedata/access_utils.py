@@ -5,8 +5,8 @@ from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Dict, Any, Optional
-from apps.sitedata.exceptions import GraphNotLoadedException
-from apps.sitedata.exceptions import MultipleGraphsLoadedException
+from .exceptions import GraphNotLoadedException
+from .exceptions import MultipleGraphsLoadedException
 from dataserver.apps.util.redis.exceptions import RedisException
 import json
 from typing import Dict, Any, Optional
@@ -254,11 +254,6 @@ def find_sitearray_file(
         raise Exception(f"No JSON file found for sitename {sitename}")
     return files[0]
 
-# /dataserver/apps/sitedata/access_utils.py
-
-import json
-from typing import Dict, Any, Optional
-import redis.asyncio as redis
 
 async def load_node_from_dict(data: Dict[str, Any], client: redis.Redis, parent: Optional[str] = None) -> None:
     """Recursively load a node and its inputs into Redis (async)."""
@@ -291,7 +286,7 @@ async def restore_to_redis_from_json(graph_json: str, client: redis.Redis):
         if not isinstance(node, dict):
             return
 
-        if node.get("devtype") == "M":  # monitor node
+        if node.get("devtype") == "SPM":  # monitor node
             mac = node.get("macaddr", "").lower()
             if mac:
                 redis_key = f"sitearray:monitor:{mac}"

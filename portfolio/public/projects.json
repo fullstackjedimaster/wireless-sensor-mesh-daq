@@ -1,0 +1,33 @@
+[
+  {
+    "title": "Wireless Sensor Mesh Data Acquisition Platform",
+    "description": "Generalized real-time SCADA/IoT telemetry engine with NATS messaging, interactive SVG maps, and Redis-based state management. Inspired by work at Solar Synapse. Independently redeveloped without proprietary code.",
+    "link": "https://github.com/tazwadshezed/wireless-sensor-mesh-daq",
+    "label": "View Source"
+  },
+  {
+    "title": "JSON-Schema Dynamic Form Builder",
+    "description": "Zero-config React form/page engine driven entirely by entity definitions — full CRUD, proper field types, and relationship handling via nested JSON.",
+    "link": "#",
+    "label": "View Demo"
+  },
+  {
+    "title": "Node.js Message-Based REST Server",
+    "description": "Schema-driven Express API with real-time JSON messaging, middleware hooks, and database-agnostic architecture. Ready for embedded or cloud use.",
+    "link": "#",
+    "label": "View Demo"
+  },
+  {
+    "title": "Full-Stack PHP Web App",
+    "description": "Built with vanilla PHP and MySQL. Includes session auth, RESTful endpoints, dynamic templates, and role-based access control.",
+    "link": "#",
+    "label": "View Source"
+  },
+  {
+    "title": "React Native Video Recorder",
+    "description": "Prototype mobile app for client 'Paz' with Android emulation and debugging. React Native + Vision Camera + Native Modules.",
+    "link": "#",
+    "label": "Watch Demo"
+  }
+]
+

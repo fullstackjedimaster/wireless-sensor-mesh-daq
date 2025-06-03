@@ -86,7 +86,17 @@ class MITTHandler:
             logger.warning("[MITTHandler] No macaddr in payload")
             return
 
-        redis_key = f"sitearray:monitor:{macaddr}"
+        def normalize_mac(raw):
+            try:
+                value = int(raw, 16)
+                hex_str = f"{value:012x}"
+                return ":".join(hex_str[i:i + 2] for i in range(0, 12, 2))
+            except ValueError:
+                return "invalid"
+
+        normalized_mac = normalize_mac(macaddr)
+        redis_key = f"sitearray:monitor:{normalized_mac}"
+
         try:
             voltage = payload.get("Vi") or 0.0
             current = payload.get("Ii") or 0.0
@@ -114,7 +124,7 @@ class MITTHandler:
             logger.error(f"[MITTHandler] Failed to write Redis key {redis_key}: {e}")
 
 class Catcher:
-    def __init__(self, site="TEST", db=1):
+    def __init__(self, site="TEST", db=3):
         self.site = site
         self.db = db
         self.redis_conn = get_redis_conn(db=self.db)
@@ -128,7 +138,7 @@ class Catcher:
     async def stop(self):
         await self.handler.stop()
 
-async def run_catcher(site="TEST", db=1):
+async def run_catcher(site="TEST", db=3):
     catcher = Catcher(site, db)
     try:
         await catcher.start()

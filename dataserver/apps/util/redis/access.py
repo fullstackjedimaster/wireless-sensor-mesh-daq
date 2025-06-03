@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from dataserver.apps.util.redis.access_utils import (
+from .access_utils import (
     get_sitearray_id,
     get_named_props,
     get_prop,
@@ -8,7 +8,7 @@ from dataserver.apps.util.redis.access_utils import (
     monitor_devtypes,
     get_redis_client,
 )
-from dataserver.apps.util.redis.exceptions import BadIdForDeviceNodeException
+from .exceptions import BadIdForDeviceNodeException
 from redis.asyncio import Redis
 
 

@@ -4,7 +4,7 @@ import redis
 import psycopg2
 from psycopg2.extras import DictCursor
 
-DEFAULT_SITE_CONFIG = "/home/zoot/wireless-sensor-mesh-daq/meshserver/DAQ/util/config.yaml"
+DEFAULT_SITE_CONFIG = "/opt/meshserver/DAQ/util/config.yaml"
 
 _config = None
 

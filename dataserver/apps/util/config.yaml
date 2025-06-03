@@ -10,14 +10,14 @@ database:
     db: 0
 
   postgres:
-    user: "postgres"
+    user: "pmikol"
     password: "LeartPee1138?"
     host: "localhost"
     port: 5432
     dbname: "ss"
 
 paths:
-  templates_dir: "/home/zoot/dataserver/apps/templates"
+  templates_dir: "/opt/dataserver/apps/templates"
 
 
 nats:
