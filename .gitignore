@@ -1,0 +1,54 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+
+# Environments and virtualenvs
+.venv/
+env/
+.venv.bak/
+*.egg-info/
+
+# Node artifacts
+node_modules/
+dist/
+build/
+
+# Logs and temp files
+*.log
+*.sqlite3
+*.db
+*.pid
+
+# IDE and OS files
+*.swp
+*.bak
+*.tmp
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets and sensitive configs
+.env
+*.pem
+*.key
+
+# YAML config files (app settings, secrets, etc.)
+config.yaml
+config*.yaml
+*.yml
+*.yaml
+
+# Output/coverage
+coverage/
+htmlcov/
+.cache/
+pytest_cache/
+
+# Compiled JS/TS
+*.tsbuildinfo
+
+# Compiled React/Next
+.next/
+out/
