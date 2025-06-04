@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request, HTTPException, Form
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 import json
+import os
+
 from .util.config import get_redis_conn, get_postgres_conn, load_config
 from .util.logger import make_logger
 from .util.faults import set_fault
@@ -23,6 +25,10 @@ def normalize_mac(raw):
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     return templates.TemplateResponse("sitedata/dashboard.html", {"request": request})
+
+@router.get("/sitearray/map", response_class=HTMLResponse)
+async def mapviewer(request: Request):
+    return templates.TemplateResponse("sitedata/mapviewer.html", {"request": request})
 
 @router.get("/sitearray/map/layout", response_class=JSONResponse)
 async def get_panel_layout():
@@ -57,7 +63,7 @@ async def get_panel_layout():
                     walk(child)
 
             walk(graph_json.get("sitearray", {}))
-            return layout
+            return JSONResponse(content=layout)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
@@ -113,14 +119,15 @@ async def sitearray_map_status():
                     "y": panel_info["y"]
                 })
 
-        return response
+        return JSONResponse(content=response)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
-@router.get("/sitearray/map", response_class=HTMLResponse)
-async def mapviewer(request: Request):
-    return templates.TemplateResponse("sitedata/mapviewer.html", {"request": request})
+@router.get("/site_graph_TEST.json")
+async def get_site_graph():
+    path = os.path.join(os.path.dirname(__file__), "../../../site_graph_TEST.json")
+    return FileResponse(path)
 
 @router.post("/api/inject_fault")
 async def inject_fault(mac: str = Form(...), fault: str = Form(...)):

@@ -1,166 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Site Array Map</title>
-  <style>
-    :root {
-      --bg-color: #f8f9fa;
-      --text-color: #000;
-      --status-grey: #999;
-      --status-red: #e74c3c;
-      --status-yellow: #f1c40f;
-      --status-blue: #3498db;
-      --status-green: #2ecc71;
-    }
 
-    [data-theme="dark"] {
-      --bg-color: #1e1e1e;
-      --text-color: #fff;
-      --status-grey: #555;
-      --status-red: #c0392b;
-      --status-yellow: #f39c12;
-      --status-blue: #2980b9;
-      --status-green: #27ae60;
-    }
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="/daq-demo/static/scripts/frameworks/svg.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: sans-serif;
-      transition: background-color 0.5s, color 0.5s;
-    }
+ <style>
+  :root {
+    --bg-color: #f8f9fa;
+    --text-color: #000;
+    --status-grey: #999;
+    --status-red: #e74c3c;
+    --status-yellow: #f1c40f;
+    --status-blue: #3498db;
+    --status-green: #2ecc71;
+  }
 
-    #theme-toggle, #beep-toggle {
-      position: absolute;
-      top: 10px;
-      padding: 8px 12px;
-      background: none;
-      border: 1px solid var(--text-color);
-      border-radius: 4px;
-      color: var(--text-color);
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-      z-index: 10;
-    }
+  [data-theme="dark"] {
+    --bg-color: #1e1e1e;
+    --text-color: #fff;
+    --status-grey: #555;
+    --status-red: #c0392b;
+    --status-yellow: #f39c12;
+    --status-blue: #2980b9;
+    --status-green: #27ae60;
+  }
 
-    #theme-toggle {
-      right: 10px;
-    }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: sans-serif;
+    height: 100%;
+    overflow-x: hidden;
+  }
 
-    #beep-toggle {
-      right: 120px;
-    }
+  button {
+    font-family: inherit;
+  }
 
-    #theme-toggle:hover, #beep-toggle:hover {
-      background-color: var(--text-color);
-      color: var(--bg-color);
-    }
+  #theme-toggle, #beep-toggle {
+    margin: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background: none;
+    border: 1px solid var(--text-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    cursor: pointer;
+  }
 
-    #chart-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--bg-color);
-      color: var(--text-color);
-      border: 1px solid var(--text-color);
-      border-radius: 8px;
-      padding: 1em;
-      z-index: 100;
-      display: none;
-      width: 400px;
-    }
+  #dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    background-color: var(--bg-color);
+  }
 
-    #chart-modal h3 {
-      margin-top: 0;
-    }
+  .control-panel {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+  }
 
-    #chart-modal button {
-      float: right;
-      margin-bottom: 10px;
-    }
+  .control-panel h2 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+  }
 
-    .status-grey   { fill: var(--status-grey); }
-    .status-red    { fill: var(--status-red); }
-    .status-yellow { fill: var(--status-yellow); }
-    .status-blue   { fill: var(--status-blue); }
-    .status-green  { fill: var(--status-green); }
+  .control-panel select,
+  .control-panel button {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
 
-    rect {
-      transition: fill 0.5s;
-      cursor: pointer;
-    }
-  </style>
+  .control-panel select {
+    background-color: white;
+    color: black;
+  }
+
+  [data-theme="dark"] .control-panel select {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #888;
+  }
+
+  .control-panel button {
+    font-weight: bold;
+    border: none;
+  }
+
+  .control-panel button:first-of-type {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .control-panel button:last-of-type {
+    background-color: #777;
+    color: white;
+  }
+
+  #map-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0 2rem;
+    box-sizing: border-box;
+  }
+
+  #map {
+    width: 240px;
+    height: 200px;
+    position: relative;
+  }
+
+  .status-grey   { fill: var(--status-grey); }
+  .status-red    { fill: var(--status-red); }
+  .status-yellow { fill: var(--status-yellow); }
+  .status-blue   { fill: var(--status-blue); }
+  .status-green  { fill: var(--status-green); }
+
+  rect {
+    transition: fill 0.5s;
+    cursor: pointer;
+  }
+
+  #chart-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 8px;
+    padding: 1em;
+    z-index: 100;
+    display: none;
+    width: 360px;
+    max-width: 90%;
+  }
+
+  #chart-modal h3 {
+    margin-top: 0;
+  }
+
+  #chart-modal button {
+    float: right;
+    margin-bottom: 10px;
+  }
+</style>
+
+
+
+
 </head>
 <body>
-  <button id="theme-toggle">Toggle Theme</button>
-  <button id="beep-toggle">🔈 Beep: OFF</button>
-
-  <!-- Dashboard Layout -->
-  <div style="display: flex; align-items: flex-start; padding: 1rem; gap: 2rem; height: calc(100% - 60px); box-sizing: border-box;">
-    <!-- Control Panel -->
-    <div class="control-panel" style="padding: 1rem; background: #f0f0f0; border-radius: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 350px;">
-      <h2 style="margin-bottom: 1rem;">⚙️ Control Panel</h2>
-
-      <label for="panel-selector"><strong>Select Panel:</strong></label>
-      <select id="panel-selector" name="mac" style="margin-bottom: 1rem; width: 100%;">
-        <option value="">-- Choose a Panel --</option>
-        <option value="fa:29:eb:6d:87:01">Panel 1</option>
-        <option value="fa:29:eb:6d:87:02">Panel 2</option>
-        <option value="fa:29:eb:6d:87:03">Panel 3</option>
-        <option value="fa:29:eb:6d:87:04">Panel 4</option>
-
-      </select>
-
-      <label for="fault-type"><strong>Select Fault Type:</strong></label>
-      <select id="fault-type" name="fault" style="margin-bottom: 1rem; width: 100%;">
-        <option value="">-- Choose a Fault --</option>
-        <option value="short_circuit">Short Circuit (low voltage)</option>
-        <option value="open_circuit">Open Circuit (zero current)</option>
-        <option value="low_voltage">Low Voltage</option>
-        <option value="dead_panel">Dead Panel</option>
-        <option value="reset">✅ Reset to Normal</option>
-      </select>
-
-      <button hx-post="/api/inject_fault"
-              hx-trigger="click"
-              hx-target="#fault-status-message"
-              hx-include="#panel-selector,#fault-type"
-              style="width: 100%; padding: 0.75rem; font-weight: bold; background-color: #d9534f; color: white; border: none; border-radius: 0.5rem;">
-              Inject Fault
-      </button>
-
-      <!-- ✅ New Clear Button -->
-      <form hx-post="/api/clear_all_faults" hx-target="#fault-status-message">
-        <button style="width: 100%; margin-top: 0.5rem; padding: 0.75rem; font-weight: bold; background-color: #888; color: white; border: none; border-radius: 0.5rem;">
-          Clear All Faults
-        </button>
-      </form>
-
-      <div id="fault-status-message" style="margin-top: 1rem; font-style: italic;"></div>
-
-    </div>
-
-    <!-- SVG Map -->
-    <div id="map" style="flex-grow: 1; height: 100%;"></div>
+  <div class="top-buttons">
+    <button id="theme-toggle">Toggle Theme</button>
+    <button id="beep-toggle">🔈 Beep: OFF</button>
   </div>
 
-  <!-- Chart Modal -->
+  <div class="control-panel">
+    <h2>⚙️ Control Panel</h2>
+
+    <label for="panel-selector">Select Panel:</label>
+    <select id="panel-selector" name="mac">
+      <option value="">Choose a Panel</option>
+      <option value="fa:29:eb:6d:87:01">Panel 1</option>
+      <option value="fa:29:eb:6d:87:02">Panel 2</option>
+      <option value="fa:29:eb:6d:87:03">Panel 3</option>
+      <option value="fa:29:eb:6d:87:04">Panel 4</option>
+    </select>
+
+    <label for="fault-type">Select Fault Type:</label>
+    <select id="fault-type" name="fault">
+      <option value="">Choose a Fault</option>
+      <option value="short_circuit">Short Circuit</option>
+      <option value="open_circuit">Open Circuit</option>
+      <option value="low_voltage">Low Voltage</option>
+      <option value="dead_panel">Dead Panel</option>
+      <option value="reset">✅ Reset to Normal</option>
+    </select>
+
+    <button hx-post="/daq-demo/api/inject_fault"
+            hx-trigger="click"
+            hx-target="#fault-status-message"
+            hx-include="#panel-selector,#fault-type">
+            Inject Fault
+    </button>
+
+    <form hx-post="/daq-demo/api/clear_all_faults" hx-target="#fault-status-message">
+      <button style="margin-top: 0.5rem;">Clear All Faults</button>
+    </form>
+
+    <div id="fault-status-message" style="margin-top: 1rem; font-style: italic;"></div>
+  </div>
+
+  <div id="map"></div>
+
   <div id="chart-modal">
     <button onclick="document.getElementById('chart-modal').style.display='none'">Close</button>
     <h3 id="chart-title">Panel Data</h3>
     <canvas id="chart" width="350" height="200"></canvas>
   </div>
-  <script src="/static/scripts/frameworks/svg.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    const draw = SVG().addTo('#map').size('100%', '100%');
+    const draw = SVG().addTo('#map').size(240, 240);
     const panelSize = { width: 60, height: 40 };
     const panelElements = {};
     const panelDataHistory = {};
@@ -190,13 +256,26 @@
 
     async function initLayout() {
       try {
-        const res = await fetch("/sitearray/map/layout");
+        const res = await fetch("/daq-demo/sitearray/map/layout");
         const layout = await res.json();
+
+        const panelWidth = panelSize.width;
+        const panelHeight = panelSize.height;
+        const xs = layout.map(p => p.x);
+        const ys = layout.map(p => p.y);
+        const minX = Math.min(...xs);
+        const minY = Math.min(...ys);
+        const maxX = Math.max(...xs);
+        const maxY = Math.max(...ys);
+        const layoutWidth = maxX - minX + panelWidth;
+        const layoutHeight = maxY - minY + panelHeight;
+        const offsetX = (300 - layoutWidth) / 2 - minX;
+        const offsetY = (300 - layoutHeight) / 2 - minY;
 
         layout.forEach(panel => {
           const mac = panel.mac.toLowerCase();
-          const rect = draw.rect(panelSize.width, panelSize.height)
-            .move(panel.x, panel.y)
+          const rect = draw.rect(panelWidth, panelHeight)
+            .move(panel.x + offsetX, panel.y + offsetY)
             .addClass("status-grey")
             .attr("data-mac", mac)
             .stroke({ width: 1, color: "#000" });
@@ -219,7 +298,7 @@
 
     async function updatePanelStatuses() {
       try {
-        const res = await fetch("/sitearray/map/status");
+        const res = await fetch("/daq-demo/sitearray/map/status");
         const panels = await res.json();
 
         panels.forEach(panel => {
@@ -312,3 +391,4 @@
   </script>
 </body>
 </html>
+

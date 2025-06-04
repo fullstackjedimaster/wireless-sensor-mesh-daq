@@ -36,7 +36,7 @@ def get_topic(name: str) -> str:
     return topic_map.get(name) or config["nats"].get(f"{name}_topic")
 
 
-def get_redis_conn(db=None):
+def get_redis_conn(db=3):
     """Returns a Redis connection if Redis is configured."""
     config = load_config()
     redis_conf = config.get("database", {}).get("redis")
@@ -45,7 +45,7 @@ def get_redis_conn(db=None):
     return redis.StrictRedis(
         host=redis_conf["host"],
         port=redis_conf["port"],
-        db=db if db is not None else redis_conf.get("db", 0),
+        db=db if db is not None else redis_conf.get("db", 3),
         decode_responses=True
     )
 
