@@ -12,7 +12,9 @@ router = APIRouter()
 config = load_config()
 logger = make_logger("Route")
 
-templates = Jinja2Templates(directory="/opt/wireless-sensor-mesh-daq/dataserver/apps/templates")
+SITE_GRAPH_PATH = "/home/pmikol/projects/wireless-sensor-mesh-daq/site_graph_TEST.json"
+
+templates = Jinja2Templates(directory="/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver/apps/templates")
 
 def normalize_mac(raw):
     try:
@@ -124,10 +126,11 @@ async def sitearray_map_status():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
+
+
 @router.get("/site_graph_TEST.json")
 async def get_site_graph():
-    path = os.path.join(os.path.dirname(__file__), "../../../site_graph_TEST.json")
-    return FileResponse(path)
+    return FileResponse(SITE_GRAPH_PATH)
 
 @router.post("/api/inject_fault")
 async def inject_fault(mac: str = Form(...), fault: str = Form(...)):

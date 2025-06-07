@@ -96,7 +96,7 @@ class AsyncEmulator:
                     s.close()
                     return addr[0]
             except asyncio.TimeoutError:
-                print("[EMULATOR] No POLO yet, retrying...")
+                pass
             except Exception as e:
                 print(f"[EMULATOR] Error: {e}")
 

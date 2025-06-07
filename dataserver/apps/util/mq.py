@@ -1,6 +1,6 @@
 import asyncio
 import bson
-from dataserver.apps.util.config import load_config
+from .config import load_config
 from nats.aio.client import Client as NATS
 
 config = load_config()

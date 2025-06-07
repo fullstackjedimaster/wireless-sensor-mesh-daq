@@ -5,10 +5,10 @@ from typing import Any
 from typing import Dict
 from typing import List
 import pytz
-from dataserver.apps.arraytools.util import naturalsorted
+from arraytools.util import naturalsorted
 from fastapi import HTTPException
 from fastapi import Request
-from dataserver.apps.util.hdf5 import HDF5Manager
+from util.hdf5 import HDF5Manager
 
 
 def mkfile_full_path(h5filename, request):

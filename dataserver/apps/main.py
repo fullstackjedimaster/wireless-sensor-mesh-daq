@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # Import all routers
-from .apps.routes import router as main_router
+from apps.routes import router as main_router
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -16,12 +16,12 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="/opt/wireless-sensor-mesh-daq/dataserver/apps/static"), name="static")
+app.mount("/daq-demo/static", StaticFiles(directory="apps/static"), name="daq-static")
 
 
 
 # Include main router
-app.include_router(main_router)
+app.include_router(main_router, prefix="/daq-demo")
 
 # Health check root
 @app.get("/", tags=["System"])

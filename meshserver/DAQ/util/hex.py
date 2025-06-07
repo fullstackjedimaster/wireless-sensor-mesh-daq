@@ -1,7 +1,11 @@
 import binascii
 import math
 import struct
-from numpy.compat import unicode
+try:
+    unicode
+except NameError:
+    unicode = str
+
 
 HALF_NAN    = 0x7E00
 HALF_NINF   = 0xFC00

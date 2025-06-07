@@ -4,7 +4,7 @@ from datetime import date
 
 conn = psycopg2.connect(
     dbname="ss",
-    user="pmikol",
+    user="ss_user",
     password="LeartPee1138?",
     host="localhost",
     port="5432"
@@ -96,23 +96,17 @@ site_graph = {
         "id": f"SA-{sitearray_id:06d}",
         "devtype": "SA",
         "label": "Site Array TEST",
-        "timezone": "America/Chicago",
+        "timezone": "America/Chicago",    
         "inputs": [{
-            "id": f"G-{gateway_id:06d}",
-            "devtype": "G",
-            "label": "Gateway 1",
-            "ipaddr": "192.168.1.1",
+            "id": f"I-{inverter_id:06d}",
+            "devtype": "I",
+            "label": "Inverter 1",
+            "serial": "INV-7281-9321",
             "inputs": [{
-                "id": f"I-{inverter_id:06d}",
-                "devtype": "I",
-                "label": "Inverter 1",
-                "serial": "INV-7281-9321",
-                "inputs": [{
-                    "id": f"S-{string_id:06d}",
-                    "devtype": "S",
-                    "label": "String 1",
-                    "inputs": panel_nodes
-                }]
+                "id": f"S-{string_id:06d}",
+                "devtype": "S",
+                "label": "String 1",
+                "inputs": panel_nodes
             }]
         }]
     }

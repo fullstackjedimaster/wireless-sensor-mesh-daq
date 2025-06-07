@@ -1,4 +1,3 @@
-# commission_sitegraph.py
 import psycopg2
 import json
 

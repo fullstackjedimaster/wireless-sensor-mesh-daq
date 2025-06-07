@@ -1,7 +1,7 @@
 import subprocess
 import re
-from dataserver.apps.util.utctime import utcepochnow
-from dataserver.apps.util.mq import DAQClient
+from util.utctime import utcepochnow
+from util.mq import DAQClient
 
 def naturalsorted(L, reverse=False):
     """
