@@ -1,10 +1,3 @@
-import debugpy
-print("🎯 Waiting for debugger attach on 0.0.0.0:5678...")
-debugpy.listen(("0.0.0.0", 5678))
-debugpy.wait_for_client()  # pause here until debugger attaches
-print("🚀 Debugger attached!")
-
-
 # run_dataserver.py
 import subprocess
 import time

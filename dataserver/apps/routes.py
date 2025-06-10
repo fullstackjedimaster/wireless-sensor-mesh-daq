@@ -3,18 +3,17 @@ from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Fil
 from fastapi.templating import Jinja2Templates
 import json
 import os
-
-from .util.config import get_redis_conn, get_postgres_conn, load_config
-from .util.logger import make_logger
-from .util.faults import set_fault
+from apps.util.config import get_redis_conn, get_postgres_conn, load_config
+from apps.util.logger import make_logger
+from apps.util.faults import set_fault
 
 router = APIRouter()
 config = load_config()
 logger = make_logger("Route")
 
-SITE_GRAPH_PATH = "/home/pmikol/projects/wireless-sensor-mesh-daq/site_graph_TEST.json"
+SITE_GRAPH_PATH = "/home/zoot/projects/wireless-sensor-mesh-daq/dataserver/apps/site_graph_TEST.json"
 
-templates = Jinja2Templates(directory="/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver/apps/templates")
+templates = Jinja2Templates(directory="/home/zoot/projects/wireless-sensor-mesh-daq/dataserver/apps/templates")
 
 def normalize_mac(raw):
     try:
@@ -34,6 +33,7 @@ async def mapviewer(request: Request):
 
 @router.get("/sitearray/map/layout", response_class=JSONResponse)
 async def get_panel_layout():
+    
     try:
         pg = get_postgres_conn()
         with pg.cursor() as cur:

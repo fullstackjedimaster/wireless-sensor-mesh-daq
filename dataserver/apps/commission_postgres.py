@@ -1,15 +1,9 @@
-import psycopg2
 import json
 from datetime import date
+from util.config import  (get_postgres_conn, load_config)
 
-conn = psycopg2.connect(
-    dbname="ss",
-    user="ss_user",
-    password="LeartPee1138?",
-    host="localhost",
-    port="5432"
-)
-cur = conn.cursor()
+pg = get_postgres_conn()
+cur = pg.cursor()
 
 # Clear old data
 cur.execute("DELETE FROM ss.site_graph")
@@ -114,7 +108,7 @@ site_graph = {
 
 cur.execute("INSERT INTO ss.site_graph (sitearray_id, json) VALUES (%s, %s)", (sitearray_id, json.dumps(site_graph)))
 
-conn.commit()
+pg.commit()
 cur.close()
-conn.close()
+pg.close()
 print("Commissioning complete.")

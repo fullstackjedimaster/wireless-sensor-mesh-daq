@@ -1,8 +1,6 @@
 # ==============================
 # Main Configuration for AppServer
 # ==============================
-
-
 database:
   redis:
     host: "localhost"
@@ -10,14 +8,14 @@ database:
     db: 3
 
   postgres:
-    user: "pmikol"
-    password: "LeartPee1138?"
+    user: "ss"
+    password: "Y@$$p4644313?"
     host: "localhost"
     port: 5432
     dbname: "ss"
 
 paths:
-  templates_dir: "/opt/wireless-sensor-mesh-daq/dataserver/apps/templates"
+  templates_dir: "/home/zoot/projects/wireless-sensor-mesh-daq/dataserver/apps/templates"
 
 
 nats:
