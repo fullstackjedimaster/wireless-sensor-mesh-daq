@@ -25,19 +25,27 @@ PANEL_MACS = [
     "fa:29:eb:6d:87:04",
 ]
 
-STATUS_PROFILES = {
-    "red":    {"Vi": 0.0,   "Ii": 100.0},
-    "yellow": {"Vi": 100.0, "Ii": 0.0},
-    "grey":   {"Vi": 0.0,   "Ii": 0.0},
-    "orange": {"Vi": 10.0,  "Ii": 10.0},
-    "green":  {"Vi": 30.0,  "Ii": 5.0},
+FAULTS = {
+
+    "short_circuit":  None,
+    "open_circuit":  None,
+    "low_voltage":   None,
+    "dead_panel":  None,
+    "normal":  None,
 }
-STATUS_KEYS = list(STATUS_PROFILES.keys())
+
+FAULTS_KEYS = list(FAULTS.keys())
 
 
 def generate_profile(macaddr):
     mac = macaddr.lower()
     fault = get_fault(mac)  # ✅ Check if a fault is active
+    if fault == "random":
+        fault = random.choice(FAULTS_KEYS)
+        reset_fault(mac)
+
+    Vi = 0.0
+    Ii = 0.0
 
     if fault == "short_circuit":
         Vi = 0.0
@@ -50,7 +58,7 @@ def generate_profile(macaddr):
         Ii = random.uniform(6.0, 7.5)
     elif fault == "dead_panel":
         Vi, Ii = 0.0, 0.0
-    else:
+    elif fault == "normal":
         # Normal
         Vi = random.uniform(38.0, 40.0)
         Ii = random.uniform(7.0, 8.0)
@@ -64,41 +72,42 @@ def generate_profile(macaddr):
     }
 
 
+async def find_siteserver():
+    loop = asyncio.get_running_loop()
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    s.setblocking(False)
+
+    try:
+        s.bind(('', ad_respond_port))
+    except Exception as e:
+        print(f"[EMULATOR] Failed to bind UDP: {e}")
+        return None
+
+    marco = b"MARCO"
+    target = ('<broadcast>', ad_listen_port)
+
+    while True:
+        print(f"[EMULATOR] Broadcasting MARCO...")
+        try:
+            await loop.sock_sendto(s, marco, target)
+            data, addr = await asyncio.wait_for(loop.sock_recvfrom(s, 1024), timeout=2.0)
+            if data.strip() == b"POLO":
+                print(f"[EMULATOR] Received POLO from {addr}")
+                s.close()
+                return addr[0]
+        except asyncio.TimeoutError:
+            pass
+        except Exception as e:
+            print(f"[EMULATOR] Error: {e}")
+
+
 class AsyncEmulator:
     def __init__(self):
         self.sim = MonitorSimulator()
         self.start_time = utcepochnow()
         self.reader = None
         self.writer = None
-
-    async def find_siteserver(self):
-        loop = asyncio.get_running_loop()
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        s.setblocking(False)
-
-        try:
-            s.bind(('', ad_respond_port))
-        except Exception as e:
-            print(f"[EMULATOR] Failed to bind UDP: {e}")
-            return None
-
-        marco = b"MARCO"
-        target = ('<broadcast>', ad_listen_port)
-
-        while True:
-            print(f"[EMULATOR] Broadcasting MARCO...")
-            try:
-                await loop.sock_sendto(s, marco, target)
-                data, addr = await asyncio.wait_for(loop.sock_recvfrom(s, 1024), timeout=2.0)
-                if data.strip() == b"POLO":
-                    print(f"[EMULATOR] Received POLO from {addr}")
-                    s.close()
-                    return addr[0]
-            except asyncio.TimeoutError:
-                pass
-            except Exception as e:
-                print(f"[EMULATOR] Error: {e}")
 
     async def connect(self, host):
         print(f"[EMULATOR] Connecting to {host}:{comm_port}...")
@@ -126,7 +135,7 @@ class AsyncEmulator:
         except Exception as e:
             print(f"[ERROR] Invalid MAC '{macaddr}': {e}")
             return
-
+        msg.request_id = random.randint(0, 0xFFFF)
         msg.source_hopcount = random.randint(1, 10)
         msg.source_queue_length = 0
         msg.dtype = Message.TYPE_PLM

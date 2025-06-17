@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 2.7 (siteserver1)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 virtualenv at ~/siteserver/venv" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 virtualenv at ~/projects/wireless-sensor-mesh-daq/meshserver/.venv" project-jdk-type="Python SDK" />
 </project>
