@@ -72,42 +72,41 @@ def generate_profile(macaddr):
     }
 
 
-async def find_siteserver():
-    loop = asyncio.get_running_loop()
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    s.setblocking(False)
-
-    try:
-        s.bind(('', ad_respond_port))
-    except Exception as e:
-        print(f"[EMULATOR] Failed to bind UDP: {e}")
-        return None
-
-    marco = b"MARCO"
-    target = ('<broadcast>', ad_listen_port)
-
-    while True:
-        print(f"[EMULATOR] Broadcasting MARCO...")
-        try:
-            await loop.sock_sendto(s, marco, target)
-            data, addr = await asyncio.wait_for(loop.sock_recvfrom(s, 1024), timeout=2.0)
-            if data.strip() == b"POLO":
-                print(f"[EMULATOR] Received POLO from {addr}")
-                s.close()
-                return addr[0]
-        except asyncio.TimeoutError:
-            pass
-        except Exception as e:
-            print(f"[EMULATOR] Error: {e}")
-
-
 class AsyncEmulator:
     def __init__(self):
         self.sim = MonitorSimulator()
         self.start_time = utcepochnow()
         self.reader = None
         self.writer = None
+
+    async def find_siteserver(self):
+        loop = asyncio.get_running_loop()
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        s.setblocking(False)
+
+        try:
+            s.bind(('', ad_respond_port))
+        except Exception as e:
+            print(f"[EMULATOR] Failed to bind UDP: {e}")
+            return None
+
+        marco = b"MARCO"
+        target = ('<broadcast>', ad_listen_port)
+
+        while True:
+            print(f"[EMULATOR] Broadcasting MARCO...")
+            try:
+                await loop.sock_sendto(s, marco, target)
+                data, addr = await asyncio.wait_for(loop.sock_recvfrom(s, 1024), timeout=2.0)
+                if data.strip() == b"POLO":
+                    print(f"[EMULATOR] Received POLO from {addr}")
+                    s.close()
+                    return addr[0]
+            except asyncio.TimeoutError:
+                pass
+            except Exception as e:
+                print(f"[EMULATOR] Error: {e}")
 
     async def connect(self, host):
         print(f"[EMULATOR] Connecting to {host}:{comm_port}...")
