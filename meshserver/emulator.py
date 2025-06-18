@@ -42,7 +42,7 @@ def generate_profile(macaddr):
     fault = get_fault(mac)  # ✅ Check if a fault is active
     if fault == "random":
         fault = random.choice(FAULTS_KEYS)
-        reset_fault(mac)
+  
 
     Vi = 0.0
     Ii = 0.0
