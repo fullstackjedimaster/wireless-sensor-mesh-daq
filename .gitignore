@@ -39,6 +39,7 @@ config.yaml
 config*.yaml
 *.yml
 *.yaml
+config.py
 
 # Output/coverage
 coverage/

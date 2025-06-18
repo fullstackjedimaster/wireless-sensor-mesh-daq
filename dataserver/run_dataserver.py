@@ -1,32 +1,59 @@
-# run_dataserver.py
+#!/usr/bin/env python3
 import subprocess
 import time
 import sys
 import os
+import signal
 
 project_root = os.path.abspath(os.path.dirname(__file__))
 dataserver_path = os.path.join(project_root, "apps")
 
-# Fix module resolution
 sys.path.insert(0, project_root)
 sys.path.insert(0, dataserver_path)
 
+child_procs = []
+
+def shutdown(signum, frame):
+    print(f"[run_dataserver] Received signal {signum}. Terminating child processes...")
+    for proc in child_procs:
+        if proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+                print(f"[run_dataserver] Terminated PID {proc.pid}")
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                print(f"[run_dataserver] Force-killed PID {proc.pid}")
+    sys.exit(0)
+
 def main():
-    catcher = os.path.join(project_root, "run_catcher.py")
+    # Hook signals
+    signal.signal(signal.SIGTERM, shutdown)
+    signal.signal(signal.SIGINT, shutdown)
+
+    catcher_path = os.path.join(project_root, "run_catcher.py")
     uvicorn_bin = os.path.join(project_root, ".venv", "bin", "uvicorn")
+    python_bin = os.path.join(project_root, ".venv", "bin", "python3")
 
-    print("Running run_catcher.py...")
-    subprocess.Popen([os.path.join(project_root, ".venv", "bin", "python3"), catcher])
+    print("[run_dataserver] Launching run_catcher.py...")
+    catcher_proc = subprocess.Popen([python_bin, catcher_path])
+    child_procs.append(catcher_proc)
 
-
-    print("Running FastAPI app...")
-    subprocess.Popen([
-        uvicorn_bin, "apps.main:app", "--host", "0.0.0.0", "--port", "8000"
+    print("[run_dataserver] Launching FastAPI app (uvicorn)...")
+    uvicorn_proc = subprocess.Popen([
+        uvicorn_bin,
+        "apps.main:app",
+        "--host", "0.0.0.0",
+        "--port", "8000"
     ], cwd=project_root)
+    child_procs.append(uvicorn_proc)
 
-    # 🧠 Prevent systemd from thinking we're done
-    while True:
-        time.sleep(3600)
+    print("[run_dataserver] Dataserver is running.")
+    try:
+        while True:
+            time.sleep(3600)
+    except KeyboardInterrupt:
+        shutdown(signal.SIGINT, None)
 
 if __name__ == "__main__":
     main()

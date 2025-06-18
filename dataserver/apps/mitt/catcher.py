@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
 import asyncio
 import bz2
+import signal
 from bson import BSON, InvalidBSON
 from datetime import datetime
+
 from apps.util.config import load_config, get_redis_conn, get_postgres_conn, get_topic
 from apps.util.logger import make_logger
 from apps.util.redis.access import GraphManager
@@ -12,8 +15,13 @@ config = load_config()
 logger = make_logger("Catcher")
 
 DATA_TOPIC = get_topic("publish")
-
 nats_manager.set_server(config["nats"]["server"])
+
+shutdown_event = asyncio.Event()
+
+def handle_signal(sig):
+    logger.warning(f"[catcher] Received signal: {sig}. Initiating shutdown...")
+    shutdown_event.set()
 
 def compute_status(voltage, current):
     try:
@@ -23,31 +31,28 @@ def compute_status(voltage, current):
         return "grey"
 
     if v == 0.0 and i > 90.0:
-        return "red"      # short_circuit: high current, low voltage
+        return "red"
     if v > 95.0 and i == 0.0:
-        return "yellow"   # open_circuit: high voltage, zero current
+        return "yellow"
     if 15.0 < v < 26.0:
-        return "blue"     # low_voltage
+        return "blue"
     if v == 0.0 and i == 0.0:
-        return "grey"     # dead_panel
-    return "green"        # normal
+        return "grey"
+    return "green"
 
 class MITTHandler:
     def __init__(self, redis_conn):
         self.throttle_delay = config.get("daq", {}).get("throttle_delay", 0.01)
         self.backpressure_threshold = config.get("daq", {}).get("backpressure_qsize", 10)
         self.redis_conn = redis_conn
-        self._stop_event = asyncio.Event()
 
     async def start(self):
         await nats_manager.connect()
         await nats_manager.nats.subscribe(DATA_TOPIC, cb=self.process_message)
         logger.info(f"[MITTHandler] Subscribed to topic: {DATA_TOPIC}")
-        await self._stop_event.wait()
 
     async def stop(self):
         logger.info("[MITTHandler] Stopping...")
-        self._stop_event.set()
         await nats_manager.disconnect()
 
     async def process_message(self, msg):
@@ -111,13 +116,7 @@ class MITTHandler:
                 "status": compute_status(voltage, current)
             }
 
-            cleaned = {}
-            for k, v in values.items():
-                if isinstance(v, (str, int, float, bytes)):
-                    cleaned[k] = str(v)
-                else:
-                    logger.warning(f"[MITTHandler] Skipping Redis field '{k}' with unsupported type: {type(v)}")
-
+            cleaned = {k: str(v) for k, v in values.items() if isinstance(v, (str, int, float, bytes))}
             self.redis_conn.hset(redis_key, mapping=cleaned)
             logger.info(f"[MITTHandler] Updated Redis key {redis_key}")
         except Exception as e:
@@ -140,11 +139,19 @@ class Catcher:
 
 async def run_catcher(site="TEST", db=3):
     catcher = Catcher(site, db)
+    await catcher.start()
+
+    loop = asyncio.get_running_loop()
+    loop.add_signal_handler(signal.SIGTERM, lambda: handle_signal("SIGTERM"))
+    loop.add_signal_handler(signal.SIGINT, lambda: handle_signal("SIGINT"))
+
     try:
-        await catcher.start()
+        logger.info("[Catcher] Running...")
+        await shutdown_event.wait()
     except asyncio.CancelledError:
         logger.info("[Catcher] Cancelled")
     finally:
+        logger.info("[Catcher] Shutting down...")
         await catcher.stop()
 
 class CatcherDaemon(Daemon):
@@ -155,5 +162,5 @@ class CatcherDaemon(Daemon):
 if __name__ == '__main__':
     try:
         asyncio.run(run_catcher())
-    except KeyboardInterrupt:
-        logger.info("[Catcher] Interrupted via keyboard")
+    except Exception as e:
+        logger.exception(f"[Catcher] Fatal error: {e}")

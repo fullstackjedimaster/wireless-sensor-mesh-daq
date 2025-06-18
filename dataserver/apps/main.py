@@ -31,4 +31,4 @@ async def root():
 
 # Entrypoint to run directly
 if __name__ == "__main__":
-    uvicorn.run("dataserver.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("dataserver.main:app", host="0.0.0.0", port=8000)
