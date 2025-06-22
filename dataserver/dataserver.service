@@ -7,25 +7,24 @@ Type=simple
 User=pmikol
 WorkingDirectory=/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver
 Environment="PYTHONPATH=/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver"
-ExecStart=/usr/bin/env bash -c 'source .venv/bin/activate && exec python run_dataserver.py'
+ExecStart=/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver/.venv/bin/python3.13 /home/pmikol/projects/wireless-sensor-mesh-daq/dataserver/run_dataserver.py
 
-# Logging to journalctl
-StandardOutput=journal
-StandardError=journal
-
-# Graceful shutdown behavior
 KillSignal=SIGINT
 KillMode=mixed
 TimeoutStopSec=10
 
-# Auto-restart on crash
 Restart=on-failure
 RestartSec=3
 
-# Security hardening
 NoNewPrivileges=true
 ProtectSystem=full
 ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=
+ReadWritePaths=/home/pmikol/projects/wireless-sensor-mesh-daq/dataserver
+
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
