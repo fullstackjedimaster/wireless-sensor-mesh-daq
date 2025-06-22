@@ -1,30 +1,28 @@
 [Unit]
 Description=Wireless Sensor Mesh Server (rundaq + emulator)
-After=network.target
-Requires=nats-server.service  # Ensure NATS is available
+After=network.target nats-meshserver-internal.service nats-meshserver-external.service
 
 [Service]
 Type=simple
 User=pmikol
 WorkingDirectory=/home/pmikol/projects/wireless-sensor-mesh-daq/meshserver
 Environment="PYTHONPATH=/home/pmikol/projects/wireless-sensor-mesh-daq/meshserver"
-
-# Activate the virtualenv and run the server
 ExecStart=/usr/bin/env bash -c 'source .venv/bin/activate && exec python run_meshserver.py'
 
-# Graceful shutdown behavior
 KillSignal=SIGINT
 KillMode=mixed
 TimeoutStopSec=10
 
-# Auto-restart if it crashes
 Restart=on-failure
 RestartSec=3
 
-# System protection
+# Security
 NoNewPrivileges=true
 ProtectSystem=full
 ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=
+ReadWritePaths=/home/pmikol/projects/wireless-sensor-mesh-daq/meshserver
 
 StandardOutput=journal
 StandardError=journal

@@ -6,7 +6,7 @@ command_mapper = {}
 
 
 def safe_int16(val):
-    return max(-32768, min(32767, int(val)))
+    return max(0, min(32767, int(val)))
 
 def parse_commands(msg, payload):
     if not payload:
@@ -130,11 +130,11 @@ class DataIndication(CommandBase):
         raw += struct.pack(">H", getattr(self, "reg_stat", 0))
 
         for point in self.data:
-            raw += struct.pack(">H", int(point['timestamp']))              # 2 bytes
-            raw += struct.pack(">h", int(point['Vi'] * 100))              # 2 bytes
-            raw += struct.pack(">h", int(point['Vo'] * 100))              # 2 bytes
-            raw += struct.pack(">h", int(point['Ii'] * 100))              # 2 bytes
-            raw += struct.pack(">h", int(point['Io'] * 100))              # 2 bytes
+            raw += struct.pack(">H", safe_int16(point['timestamp']))              # 2 bytes
+            raw += struct.pack(">h", safe_int16(point['Vi'] * 100))              # 2 bytes
+            raw += struct.pack(">h", safe_int16(point['Vo'] * 100))              # 2 bytes
+            raw += struct.pack(">h", safe_int16(point['Ii'] * 100))              # 2 bytes
+            raw += struct.pack(">h", safe_int16(point['Io'] * 100))              # 2 bytes
             raw += struct.pack(">h", safe_int16(point.get('Pi', 0) * 100)) # 2 bytes
             raw += struct.pack(">h", safe_int16(point.get('Po', 0) * 100)) # 2 bytes
 
@@ -266,7 +266,7 @@ class Message:
         tokens, remaining = cls.tokenize_string(payload, cls.LEN_ORDER)
         msg.mesh_ctrl = MeshCtrl(tokens[0][0])
         msg.addr = _h(tokens[1][::-1])
-        msg.request_id = int.from_bytes(tokens[2], 'big')
+        msg.request_id = safe_int16.from_bytes(tokens[2], 'big')
         msg.source_hopcount = tokens[3][0]
         msg.source_queue_length = tokens[4][0]
         msg.hopcount = tokens[5][0]
