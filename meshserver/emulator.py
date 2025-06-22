@@ -62,6 +62,9 @@ def generate_profile(macaddr):
         # Normal
         Vi = random.uniform(38.0, 40.0)
         Ii = random.uniform(7.0, 8.0)
+    else:# Normal
+        Vi = random.uniform(38.0, 40.0)
+        Ii = random.uniform(7.0, 8.0)
 
     Pi = round(Vi * Ii, 2)
     return {
