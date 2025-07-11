@@ -1,0 +1,21 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+/* Custom theme variables (optional) */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, sans-serif;
+}

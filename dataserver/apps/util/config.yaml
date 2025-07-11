@@ -1,5 +1,5 @@
 # ==============================
-# Main Configuration for AppServer
+# Main Configuration for DataServer
 # ==============================
 database:
   redis:
@@ -15,11 +15,11 @@ database:
     dbname: "ss"
 
 paths:
-  templates_dir: "/home/zoot/projects/wireless-sensor-mesh-daq/dataserver/apps/templates"
+  templates_dir: "/home/zoot/projects/mesh-daq/dataserver/apps/templates"
 
 
 nats:
-  server: "nats://127.0.0.1:5222"
+  server: "nats://fullstackjedi.dev:5222"
   publish_topic: "mesh.data"  # This is what Catcher subscribes to
 
 logging:

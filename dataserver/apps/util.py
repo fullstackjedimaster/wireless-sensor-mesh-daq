@@ -8,9 +8,7 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 from typing import List
-
 import pytz
-from apps.arraytools.util import naturalsorted
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi import Request
@@ -109,10 +107,7 @@ def devices_whitelist(sa_dict: Dict[str, Any]) -> Dict[str, Any]:
     return {k: v for k, v in list(sa_dict.items()) if k in sitearray_whitelist}
 
 
-# Sort rows naturally
-def sort_row_data(rows: List[List[Any]]) -> List[List[Any]]:
-    """Sort rows using naturalsorted."""
-    return naturalsorted(rows, key=lambda row: (row[0] or "", row[1] or ""))
+
 
 
 # Dependency injection for request state and session

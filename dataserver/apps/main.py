@@ -1,12 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware  # ✅ Add this
+from .routes import router as main_router
 
-# Import all routers
-from apps.routes import router as main_router
-
-# Initialize FastAPI app
 app = FastAPI(
     title="Data Server API",
     description="Backend API for mesh dashboard and visualization",
@@ -15,20 +11,21 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Mount static files
-app.mount("/daq-demo/static", StaticFiles(directory="apps/static"), name="daq-static")
+# ✅ CORS Setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # OR use ["http://localhost:3001"] for stricter control
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-
-# Include main router
+# ✅ Include main routes
 app.include_router(main_router, prefix="/daq-demo")
 
-# Health check root
 @app.get("/", tags=["System"])
 async def root():
     return {"message": "Data Server is running!"}
 
-
-# Entrypoint to run directly
 if __name__ == "__main__":
     uvicorn.run("dataserver.main:app", host="0.0.0.0", port=8000)

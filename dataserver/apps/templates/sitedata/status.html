@@ -1,8 +1,0 @@
-<!-- templates/partials/status.html -->
-<ul class="panel-status-list">
-    {% for panel in panels %}
-    <li class="panel {{ 'status-' + panel.status }}">
-        Panel {{ panel.id }} → Status: {{ panel.status|capitalize }}
-    </li>
-    {% endfor %}
-</ul>

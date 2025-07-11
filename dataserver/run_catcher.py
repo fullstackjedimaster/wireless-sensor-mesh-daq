@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import asyncio
 import signal
+from bootstrap_path import add_project_root
+
+# ✅ Ensure all imports resolve from dataserver root
+add_project_root()
 
 from apps.mitt.catcher import Catcher
 from apps.util.logger import make_logger

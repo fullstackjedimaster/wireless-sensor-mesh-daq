@@ -4,12 +4,11 @@ import time
 import sys
 import os
 import signal
+from bootstrap_path import add_project_root
 
+# ✅ Ensure all imports resolve from dataserver root
+add_project_root()
 project_root = os.path.abspath(os.path.dirname(__file__))
-dataserver_path = os.path.join(project_root, "apps")
-
-sys.path.insert(0, project_root)
-sys.path.insert(0, dataserver_path)
 
 child_procs = []
 
